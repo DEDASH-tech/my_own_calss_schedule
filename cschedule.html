@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的课表同步</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f8fafc;
+            --text-color: #334155;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 1100px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        .timestamp {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        /* 表格容器：支持手机横向滚动 */
+        .table-wrapper {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            padding: 15px;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px; /* 保证手机上不会挤在一起 */
+        }
+
+        .schedule-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+            padding: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .schedule-table td {
+            padding: 15px 10px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* 每一行的第一个单元格（通常是时间）加粗加亮 */
+        .schedule-table td:first-child {
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: #f8fafc;
+        }
+
+        /* 高亮有课的单元格 */
+        .schedule-table td:not(:empty) {
+            background-color: #f0f7ff;
+            color: #1e40af;
+            transition: all 0.2s;
+        }
+
+        .schedule-table tr:hover td:not(:empty) {
+            background-color: #e0efff;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 我的周课表</h1>
+            <div class="timestamp">更新于：2026-02-27 01:05</div>
+        </header>
+
+        <div class="table-wrapper">
+            <table class="dataframe schedule-table">
+  <thead>
+    <tr style="text-align: center;">
+      <th>我的课程表</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2025-2026学年第2学期</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>学生：奚李杰(55240720)</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>上课时间暂未确定的课程：</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>调课信息：</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>节次/星期</td>
+      <td></td>
+      <td>星期一</td>
+      <td>星期二</td>
+      <td>星期三</td>
+      <td>星期四</td>
+      <td>星期五</td>
+      <td>星期六</td>
+      <td>星期日</td>
+    </tr>
+    <tr>
+      <td>第1节-第2节</td>
+      <td></td>
+      <td>\n\nae22931301-概率论与数理统计A[12]\n1-14周,星期1,第1节-第2节前卫-逸夫楼-第十二阶梯</td>
+      <td>\n\nae22553003-数据结构课程设计[02]\n2-10周,星期2,第1节-第4节计算机软件实验室（三）B212-213</td>
+      <td>\n\nae22551005-算法设计与分析A[02]\n1-12周,星期3,第1节-第2节前卫-逸夫楼-第五阶梯</td>
+      <td></td>
+      <td></td>
+      <td>\n\nae22391004-毛泽东思想和中国特色社会主义理论体系概论[17]\n9周,星期6,第1节-第2节线上教学-前卫,\n\nae22391004-毛泽东思想和中国特色社会主义理论体系概论[17]\n1-8周,10周,星期6,第1节-第2节前卫-法学楼-106</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>第3节-第4节</td>
+      <td></td>
+      <td>\n\nae22393004-思想政治理论课实践教学[16]\n9周,星期1,第3节-第4节前卫-萃文教学楼-第八阶梯,\n\nae22393004-思想政治理论课实践教学[16]\n6-8周,星期1,第3节-第4节线上教学-前卫,\n\nae22393004-思想政治理论课实践教学[16]\n3-5周,星期1,第3节-第4节线上教学-前卫,\n\nae22393004-思想政治理论课实践教学[16]\n2周,星期1,第3节-第4节前卫-萃文教学楼-第八阶梯</td>
+      <td>\n\nae22553003-数据结构课程设计[02]\n2-10周,星期2,第1节-第4节计算机软件实验室（三）B212-213</td>
+      <td>\n\nae22931301-概率论与数理统计A[12]\n1-14周,星期3,第3节-第4节前卫-逸夫楼-第十二阶梯</td>
+      <td></td>
+      <td>\n\nae22931301-概率论与数理统计A[12]\n8-14周,星期5,第3节-第4节前卫-逸夫楼-第十二阶梯</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>第5节-第6节</td>
+      <td></td>
+      <td>\n\nae22551005-算法设计与分析A[02]\n1-12周,星期1,第5节-第6节前卫-逸夫楼-第十阶梯</td>
+      <td>\n\nae22921004-体育Ⅳ[95]\n1-3周,5-16周,星期2,第5节-第6节无</td>
+      <td>\n\nae22551006-人工智能引论[02]\n1-8周,星期3,第5节-第6节前卫-敬信教学楼-F区第十阶梯,\n\nae22552005-数据库系统原理[02]\n11-13周,星期3,第5节-第8节软件综合实验室1A108</td>
+      <td>\n\nae22393004-思想政治理论课实践教学[16]\n6-7周,10周,星期4,第5节-第6节线上教学-前卫,\n\nae22393004-思想政治理论课实践教学[16]\n9周,星期4,第5节-第6节前卫-萃文教学楼-第八阶梯,\n\nae22393004-思想政治理论课实践教学[16]\n3-5周,星期4,第5节-第6节线上教学-前卫,\n\nae22393004-思想政治理论课实践教学[16]\n2周,星期4,第5节-第6节前卫-萃文教学楼-第八阶梯,\n\nae22552004-操作系统原理[02]\n14-16周,星期4,第5节-第8节软件综合实验室1A108</td>
+      <td>\n\nae22552022-Java程序设计[02]\n3-4周,6-8周,星期5,第5节-第8节软件综合实验室1A108</td>
+      <td>\n\nae22551024-计算方法B[01]\n1-10周,星期6,第5节-第8节前卫-敬信教学楼-F区第四阶梯</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>第7节-第8节</td>
+      <td></td>
+      <td>\n\nae22551006-人工智能引论[02]\n1-8周,星期1,第7节-第8节前卫-敬信教学楼-F区第十阶梯</td>
+      <td>\n\nae22552022-Java程序设计[02]\n1-3周,5-8周,星期2,第7节-第8节前卫-敬信教学楼-F区第四阶梯</td>
+      <td>\n\nae22552005-数据库系统原理[02]\n11-13周,星期3,第5节-第8节软件综合实验室1A108,\n\nae22552004-操作系统原理[02]\n1-8周,星期3,第7节-第8节前卫-敬信教学楼-F区第十一阶梯</td>
+      <td>\n\nae22552004-操作系统原理[02]\n14-16周,星期4,第5节-第8节软件综合实验室1A108,\n\nae22552022-Java程序设计[02]\n1-7周,9周,星期4,第7节-第8节前卫-第三教学楼-第十四阶梯</td>
+      <td>\n\nae22552022-Java程序设计[02]\n3-4周,6-8周,星期5,第5节-第8节软件综合实验室1A108</td>
+      <td>\n\nae22551024-计算方法B[01]\n1-10周,星期6,第5节-第8节前卫-敬信教学楼-F区第四阶梯</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>第9节-第10节</td>
+      <td></td>
+      <td>\n\nae22391004-毛泽东思想和中国特色社会主义理论体系概论[17]\n9周,星期1,第9节-第10节线上教学-前卫,\n\nae22391004-毛泽东思想和中国特色社会主义理论体系概论[17]\n1-8周,10周,星期1,第9节-第10节前卫-法学楼-106</td>
+      <td>\n\nae22552022-Java程序设计[02]\n4周,星期2,第9节-第10节前卫-敬信教学楼-F区第三阶梯</td>
+      <td>\n\nae22552005-数据库系统原理[02]\n1-8周,星期3,第9节-第10节前卫-敬信教学楼-F区第十一阶梯</td>
+      <td>\n\nae22552004-操作系统原理[02]\n1-8周,星期4,第9节-第11节前卫-敬信教学楼-F区第五阶梯</td>
+      <td>\n\nae22552022-Java程序设计[02]\n5周,星期5,第9节-第12节软件综合实验室1A108</td>
+      <td>\n\nae22552005-数据库系统原理[02]\n1-8周,星期6,第9节-第11节前卫-敬信教学楼-F区第十一阶梯</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>第11节-第12节</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>\n\nae22552004-操作系统原理[02]\n1-8周,星期4,第9节-第11节前卫-敬信教学楼-F区第五阶梯</td>
+      <td>\n\nae22552022-Java程序设计[02]\n5周,星期5,第9节-第12节软件综合实验室1A108</td>
+      <td>\n\nae22552005-数据库系统原理[02]\n1-8周,星期6,第9节-第11节前卫-敬信教学楼-F区第十一阶梯</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+    </div>
+</body>
+</html>
+    
